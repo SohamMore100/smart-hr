@@ -5,20 +5,25 @@ import { Navigate } from "react-router-dom";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [first_name, setfirst] = useState("");
+  const [middle_name, setmiddle] = useState("");
+  const [last_name, setlast] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleRegister = async () => {
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   setError("Passwords do not match");
+    //   return;
+    // }
 
     try {
       const response = await axios.post("http://localhost:8000/api/register", {
-        name,
+        first_name,
+        middle_name,
+        last_name,
         email,
         password,
       });
@@ -41,11 +46,26 @@ const Register = () => {
 
       {error && <p className="text-red-500">{error}</p>}
 
+    
       <input
         type="text"
-        placeholder="Full Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        placeholder="First Name"
+        value={first_name}
+        onChange={(e) => setfirst(e.target.value)}
+        className="border p-2 my-2 w-64"
+      />
+      <input
+        type="text"
+        placeholder="Middle Name"
+        value={middle_name}
+        onChange={(e) => setmiddle(e.target.value)}
+        className="border p-2 my-2 w-64"
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={last_name}
+        onChange={(e) => setlast(e.target.value)}
         className="border p-2 my-2 w-64"
       />
       <input
@@ -62,13 +82,7 @@ const Register = () => {
         onChange={(e) => setPassword(e.target.value)}
         className="border p-2 my-2 w-64"
       />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        className="border p-2 my-2 w-64"
-      />
+  
 
       <button
         onClick={handleRegister}
