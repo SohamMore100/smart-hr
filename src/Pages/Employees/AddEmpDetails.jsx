@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../Layout Component/Navbar";
 import Sidebar from "../../Layout Component/Sidebar";
-// import { showSuccessToast,showErrorToast } from "../../../../toastService";
 
 export default function AddEmpDetails() {
   const {
@@ -28,36 +27,44 @@ export default function AddEmpDetails() {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:8000/api/employee/add/${id}`)
-      .then((response) => {
-        // Transform API response into the format required for options
-        const formattedOptions = response.data.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }));
-        setDrSignOptions(formattedOptions);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
   const onSubmit = async (data) => {
-    const parsedData = {
-      ...data,
-      // mobile: parseInt(data.mobile, 10),
-      // status: data.status === 'true',
-    };
-    const response = await axios.post("lab-group", parsedData);
-    console.log(response);
-    if (response?.data?.status) {
-      // showSuccessToast('Lab Created Successfully.');
-      navigate("/lab-group");
-      console.log(response.data.data);
-    } else {
-      setSetServerError(response.data.errors);
-      // showErrorToast('Something went wrong');
-      console.log(err);
+    try {
+      const formData = new FormData();
+
+      // Append form fields to FormData
+      Object.keys(data).forEach((key) => {
+        if (data[key] !== undefined && data[key] !== null) {
+          formData.append(key, data[key]);
+        }
+      });
+
+      // Append the photo file (ensure `data.photo` is a File object)
+      if (data.photo && data.photo[0]) {
+        formData.append("photo", data.photo[0]); // Use the first file
+      }
+
+      const response = await axios.post(
+        "http://localhost:8000/api/employees/add",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response);
+      if (response?.data?.message) {
+        showSuccessToast("Employee Created Successfully.");
+        navigate("/dashboard");
+        console.log(response.data.data);
+      } else {
+        setSetServerError(response.data.errors);
+        showErrorToast("Something went wrong");
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      showErrorToast("Something went wrong");
     }
   };
 
@@ -142,9 +149,9 @@ export default function AddEmpDetails() {
                   label="Gender"
                   placeholder="Select Gender"
                   options={[
-                    { value: "male", label: "Male" },
-                    { value: "female", label: "Female" },
-                    { value: "other", label: "Other" },
+                    { value: 1, label: "Male" },
+                    { value: 2, label: "Female" },
+                    { value: 3, label: "Other" },
                   ]}
                   columnName="gender"
                   validationRules={{ required: "Required" }}
@@ -241,17 +248,17 @@ export default function AddEmpDetails() {
                   serverError={serverError}
                 />
 
-                <FormInputFile
+                {/* <FormInputFile
                   width="md:w-1/3 lg:w-1/3"
                   id="photo"
                   label="Upload Photo"
                   type="file"
                   columnName="photo"
-                  validationRules={{ required: "Required" }}
+                  // validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
-                />
+                /> */}
               </div>
               <SimpleButton
                 buttonName={isSubmitting ? "Submitting..." : "Submit"}

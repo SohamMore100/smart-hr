@@ -28,23 +28,23 @@ export default function EditEmpDetails() {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    axios
-      .post(`http://localhost:8000/api/employee/edit/${id}`)
-      .then((response) => {
-        // Transform API response into the format required for options
-        const formattedOptions = response.data.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }));
-        setDrSignOptions(formattedOptions);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .post(`http://localhost:8000/api/employees/edit/${id}`)
+  //     .then((response) => {
+  //       // Transform API response into the format required for options
+  //       const formattedOptions = response.data.map((item) => ({
+  //         value: item.id,
+  //         label: item.name,
+  //       }));
+  //       setDrSignOptions(formattedOptions);
+  //     })
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // }, []);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/employee/edit/${id}`)
+      .get(`http://localhost:8000/api/employees/edit/${id}`)
       .then((result) => {
         if (result.data.status) {
           setAccount(result.data.data);
@@ -71,7 +71,6 @@ export default function EditEmpDetails() {
       console.log(err);
     }
   };
-  
 
   return (
     <>
