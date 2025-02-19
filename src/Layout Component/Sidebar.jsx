@@ -22,7 +22,7 @@ const menuItems = [
       {
         name: "Add Employee",
         icon: <Plus size={18} />,
-        link: "/employee/add",
+        link: "/employee/details/add",
       },
       { name: "Employee List", icon: <List size={18} />, link: "/emp_list" },
     ],
