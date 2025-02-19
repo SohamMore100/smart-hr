@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 import { showErrorToast, showSuccessToast } from "../../toastService";
-// import { showSuccessToast,showErrorToast } from "../../../../toastService";
+
 export default function AddEmp() {
   
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -25,7 +25,7 @@ export default function AddEmp() {
       if (response.data.success) {
         showSuccessToast("User registered successfully");
         
-        navigate("../employee/");
+        navigate("../employee/details/add/:id");
       } else {
         setServerError(response.data.error);
         showErrorToast(response.data.error)
@@ -39,10 +39,10 @@ export default function AddEmp() {
 
   return (
     <div className="flex flex-col h-screen overflow-x-scroll">
-      <MainHeader title="Employee / Academic Details / Add" />
+      <MainHeader title="Employee / Add" />
       <div className="flex-grow mx-3 mb-3 rounded-lg bg-slate-200">
         <div className="p-3 flex items-center justify-between">
-          <h1 className="text-md uppercase font-semibold">Add Academic Details</h1>
+          <h1 className="text-md uppercase font-semibold">Add Employee</h1>
           <SimpleButton danger={true} onClick={() => {navigate('../employee/')}} icon={<FontAwesomeIcon className="me-2" icon={faMultiply}/>} buttonName='Cancel'/>
         </div>
         <div className="mx-3 mb-3 bg-white rounded-lg p-3">

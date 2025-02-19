@@ -15,6 +15,7 @@ import AddEmpDetails from "./Pages/Employees/AddEmpDetails";
 import EditEmpDetails from "./Pages/Employees/EditEmpDetails";
 import AddEmp from "./Pages/Employees/AddEmp";
 import EditEmp from "./Pages/Employees/EditEmp";
+import ShowEmployee from "./Pages/Employees/ShowEmployee";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
           path="*"
           element={<h1 className=" mr-[50%]  text-5xl">Not Found</h1>}
         />
-        <Route path="/employee/details/add" element={<AddEmpDetails />} />
+        <Route path="/employee/details/add/:id" element={<AddEmpDetails />} />
         <Route path="/employee/details/edit/:id" element={<EditEmpDetails />} />
 
         {/* Employee Education Details  */}
@@ -39,6 +40,7 @@ function App() {
         {/* Add Employee  */}
         <Route path="/employee/add" element={<AddEmp />} />
         <Route path="/employee/edit/:id" element={<EditEmp />} />
+        <Route path="/employee" element={<ShowEmployee />} />
 
         {/* Work Exp */}
         <Route path="/employee/experience/add" element={<Add_Exp />} />

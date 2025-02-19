@@ -12,8 +12,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "../../Layout Component/Navbar";
-import Sidebar from "../../Layout Component/Sidebar";
+import { showSuccessToast, showErrorToast } from "../../toastService";
 
 export default function AddEmpDetails() {
   const {
@@ -22,11 +21,39 @@ export default function AddEmpDetails() {
     formState: { errors, isSubmitting },
   } = useForm();
   const [serverError, setSetServerError] = useState({});
-  const [drSignOptions, setDrSignOptions] = useState([]);
+  const [reportingManagers, setReportingManagers] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const { id } = useParams();
 
+  useEffect(() => {
+    const fetchReportingManagers = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get("http://localhost:8000/api/users");
+        console.log("API Response:", response.data); // Debugging
+
+        // Extract the nested `data` array from the response
+        if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
+          setReportingManagers(response.data.data.data); // Set the nested `data` array
+        } else {
+          setError("Invalid API response format");
+          showErrorToast("Failed to fetch reporting managers");
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching reporting managers:", err);
+        showErrorToast("Failed to fetch reporting managers");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReportingManagers();
+  }, []);
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
@@ -44,7 +71,7 @@ export default function AddEmpDetails() {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/api/employees/add",
+        `http://localhost:8000/api/employees/add/${id}`,
         formData,
         {
           headers: {
@@ -55,8 +82,8 @@ export default function AddEmpDetails() {
 
       console.log(response);
       if (response?.data?.message) {
-        showSuccessToast("Employee Created Successfully.");
-        navigate("/dashboard");
+        showSuccessToast("Employee personal information added Successfully.");
+        navigate("/employee/education/add");
         console.log(response.data.data);
       } else {
         setSetServerError(response.data.errors);
@@ -89,20 +116,20 @@ export default function AddEmpDetails() {
           <div className="mx-3 mb-3 bg-white rounded-lg p-3">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-wrap mb-6">
-                <FormInputSelect
-                  width="md:w-1/3 lg:w-1/3"
-                  id="reporting_manager_id"
-                  label="Reporting Manager"
-                  placeholder="Select Reporting Manager"
-                  options={[
-                    { value: "1", label: "Manager 1" },
-                    { value: "2", label: "Manager 2" },
-                  ]}
-                  columnName="reporting_manager_id"
-                  validationRules={{ required: "Required" }}
-                  register={register}
-                  errors={errors}
-                />
+              <FormInputSelect
+                width="md:w-1/3 lg:w-1/3"
+                id="reporting_manager_id"
+                label="Reporting Manager"
+                placeholder="Select Reporting Manager"
+                options={Array.isArray(reportingManagers) ? reportingManagers.map(manager => ({
+                  value: manager.id,
+                  label: manager.first_name
+                })) : []}
+                columnName="reporting_manager_id"
+                validationRules={{ required: "Required" }}
+                register={register}
+                errors={errors}
+              />
 
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
@@ -248,7 +275,7 @@ export default function AddEmpDetails() {
                   serverError={serverError}
                 />
 
-                {/* <FormInputFile
+                <FormInputFile
                   width="md:w-1/3 lg:w-1/3"
                   id="photo"
                   label="Upload Photo"
@@ -258,7 +285,7 @@ export default function AddEmpDetails() {
                   register={register}
                   errors={errors}
                   serverError={serverError}
-                /> */}
+                />
               </div>
               <SimpleButton
                 buttonName={isSubmitting ? "Submitting..." : "Submit"}

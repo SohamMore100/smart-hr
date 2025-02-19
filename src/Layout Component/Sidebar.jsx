@@ -24,7 +24,7 @@ const menuItems = [
         icon: <Plus size={18} />,
         link: "/employee/details/add",
       },
-      { name: "Employee List", icon: <List size={18} />, link: "/emp_list" },
+      { name: "Employee List", icon: <List size={18} />, link: "/employee" },
     ],
   },
   {

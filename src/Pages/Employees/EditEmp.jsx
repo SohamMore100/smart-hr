@@ -17,7 +17,7 @@ function EditEmp() {
     const navigate= useNavigate();
 
     useEffect(() => {
-        axios.get(`patient/${id}`).then((result) => {
+        axios.get(`http://127.0.0.1:8000/api/users/${id}`).then((result) => {
             if(result.data.status){
                 setPatient(result.data.data);
             }
@@ -39,7 +39,7 @@ function EditEmp() {
             prefix: data.prefix+'',
             blood_group: data.blood_group +'',
         };
-        const result = await axios.put(`patient/${id}`, parsedData)
+        const result = await axios.post(`http://127.0.0.1:8000/api/users/${id}`, parsedData)
         console.log(result);
         if(result.data.status){
             showSuccessToast("Details updated successfully");
@@ -53,11 +53,11 @@ function EditEmp() {
     };
     return (
         <div className="flex flex-col h-screen overflow-x-scroll">
-            <MainHeader title="Patient / Edit"/>
+            <MainHeader title="Employee / Edit"/>
             <div className="flex-grow mx-3 mb-3 rounded-lg bg-slate-200">
                 <div className="p-3 flex items-center justify-between">
                 <h1 className="text-md uppercase font-semibold">Edit Patient</h1>
-                <SimpleButton danger={true} onClick={() => {navigate('../patient')}} icon={<FontAwesomeIcon className="me-2" icon={faMultiply}/>} buttonName='Cancel'/>
+                <SimpleButton danger={true} onClick={() => {navigate('../employee')}} icon={<FontAwesomeIcon className="me-2" icon={faMultiply}/>} buttonName='Cancel'/>
                 </div>
                 <div className="mx-3 mb-3 bg-white rounded-lg p-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -74,8 +74,7 @@ function EditEmp() {
                             validationRules={{ required: false}} register={register} errors={errors} serverError={serverError}/>
                         <FormInputBar width='md:w-1/4 lg:w-1/4' id='email' label='Email' placeholder='Enter email' type='email' columnName='email' 
                             validationRules={{ required: false}} register={register} errors={errors} serverError={serverError}/>
-                        <FormInputBar width='md:w-1/4 lg:w-1/4' id='password' label='Password' placeholder='Enter password' type='text' columnName='password' 
-                            validationRules={{ required: false}} register={register} errors={errors} serverError={serverError}/>
+                        
                         <FormInputSelect
                             width='md:w-1/4'
                             options={[{ value: 2, label: 'Intern' }, { value: 3, label: 'Junior Associate Engineer.' }, { value: 4, label: 'Associate Engineer' }, { value: 5, label: 'Project Manager' }, { value: 6, label: 'Data Entry Executive' }]}
