@@ -10,10 +10,13 @@ import AddEmp from "./Pages/Employees/AddEmp";
 import Edit_Emp from "./Pages/Employees/Edit_Emp";
 import { ToastContainer } from "react-toastify";
 import EduDetails from "./Pages/Employees/EduDetails";
+import Add_Exp from "./Pages/Work_Exp/Add_Exp";
+import Edit_exp from "./Pages/Work_Exp/Edit_exp";
 
 function App() {
   return (
     <>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -26,6 +29,11 @@ function App() {
         <Route path="/employee/add" element={<AddEmp />} />
         <Route path="/employee/education/add" element={<EduDetails />} />
         <Route path="/employee/edit" element={<Edit_Emp />} />
+
+        {/* Work Exp */}
+        <Route path="/experience/add" element={<Add_Exp />} />
+        <Route path="/experience/edit" element={<Edit_exp />} />
+
         
       </Routes>
     </>
