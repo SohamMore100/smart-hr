@@ -1,58 +1,95 @@
 import { useState } from "react";
-import { Menu, X, Home, Users, Settings, User } from "lucide-react";
+import {
+  Menu,
+  X,
+  Home,
+  Users,
+  Settings,
+  FileText,
+  Calendar,
+  LogOut,
+} from "lucide-react";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
-      className={`fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white transform ${
+      className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 shadow-md transform ${
         isOpen ? "translate-x-0" : "-translate-x-64"
-      } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out shadow-lg z-50`}
+      } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-50`}
     >
-      <div className="p-4 flex justify-between md:hidden">
-        <h2 className="text-xl font-bold">HR WebApp</h2>
-        <button onClick={toggleSidebar} className="text-white">
+      {/* Sidebar Header */}
+      <div className="p-5 flex justify-between items-center">
+        <h2 className="text-xl font-semibold text-gray-900">talensync</h2>
+        <button onClick={toggleSidebar} className="md:hidden text-gray-600">
           <X size={28} />
         </button>
       </div>
 
-      <nav className="mt-8">
-        <ul className="space-y-4">
-          <li className="px-6 py-3 flex items-center gap-3 text-lg font-medium hover:bg-gray-700 rounded-md cursor-pointer transition">
-            <Home size={22} /> Dashboard
-          </li>
-          <li className="px-6 py-3 flex items-center gap-3 text-lg font-medium hover:bg-gray-700 rounded-md cursor-pointer transition">
-            <Users size={22} /> Employees
-          </li>
-          <li className="px-6 py-3 flex items-center gap-3 text-lg font-medium hover:bg-gray-700 rounded-md cursor-pointer transition">
-            <Settings size={22} /> Settings
-          </li>
-          <li className="px-6 py-3 flex items-center gap-3 text-lg font-medium hover:bg-gray-700 rounded-md cursor-pointer transition">
-            <User size={22} /> Profile
-          </li>
+      {/* Navigation */}
+      <nav className="mt-4">
+        <ul className="space-y-2">
+          {[
+            { name: "Overview", icon: <Home size={20} /> },
+            { name: "Calendar", icon: <Calendar size={20} /> },
+            { name: "Recruitment", icon: <Users size={20} /> },
+            { name: "Onboarding", icon: <FileText size={20} /> },
+            { name: "Performance", icon: <FileText size={20} /> },
+            { name: "Payroll", icon: <FileText size={20} /> },
+            { name: "Development", icon: <FileText size={20} />, active: true },
+            { name: "Reports", icon: <FileText size={20} /> },
+          ].map((item, index) => (
+            <li
+              key={index}
+              className={`flex items-center px-6 py-3 text-gray-700 text-[16px] font-medium cursor-pointer rounded-md transition ${
+                item.active ? "bg-blue-100 text-blue-600" : "hover:bg-gray-100"
+              }`}
+            >
+              {item.icon}
+              <span className="ml-3">{item.name}</span>
+            </li>
+          ))}
         </ul>
       </nav>
+
+      {/* Logout & Settings */}
+      <div className="absolute bottom-4 left-0 w-full">
+        <ul className="px-6">
+          <li className="flex items-center px-6 py-3 text-gray-700 font-medium cursor-pointer hover:bg-gray-100 rounded-md transition">
+            <Settings size={20} />
+            <span className="ml-3">Settings</span>
+          </li>
+          <li className="flex items-center px-6 py-3 text-gray-700 font-medium cursor-pointer hover:bg-gray-100 rounded-md transition">
+            <LogOut size={20} />
+            <span className="ml-3">Log out</span>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
 
 const Navbar = ({ toggleSidebar }) => {
   return (
-    <nav className="bg-blue-500 text-white px-6 py-4 flex justify-between items-center shadow-md">
+    <nav className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
       {/* Mobile Menu Button */}
-      <button onClick={toggleSidebar} className="md:hidden">
+      <button onClick={toggleSidebar} className="md:hidden text-gray-600">
         <Menu size={28} />
       </button>
 
-      {/* Logo */}
-      <div className="text-2xl font-bold">HR WebApp</div>
+      {/* Title */}
+      <div className="text-xl font-semibold text-gray-900">Development</div>
 
-      {/* Desktop Links */}
-      <ul className="hidden md:flex space-x-6">
-        <li className="hover:text-gray-300 cursor-pointer">Dashboard</li>
-        <li className="hover:text-gray-300 cursor-pointer">Employees</li>
-        <li className="hover:text-gray-300 cursor-pointer">Settings</li>
-        <li className="hover:text-gray-300 cursor-pointer">Profile</li>
-      </ul>
+      {/* Search & Profile */}
+      <div className="flex items-center space-x-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          className="hidden md:block px-4 py-2 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
+          I
+        </div>
+      </div>
     </nav>
   );
 };
