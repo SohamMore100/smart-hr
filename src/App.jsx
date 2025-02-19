@@ -13,6 +13,8 @@ import Edit_exp from "./Pages/Work_Exp/Edit_exp";
 import EditEduDetails from "./Pages/Employees/EditEduDetails";
 import AddEmpDetails from "./Pages/Employees/AddEmpDetails";
 import EditEmpDetails from "./Pages/Employees/EditEmpDetails";
+import AddEmp from "./Pages/Employees/AddEmp";
+import EditEmp from "./Pages/Employees/EditEmp";
 
 function App() {
   return (
@@ -33,6 +35,10 @@ function App() {
         {/* Employee Education Details  */}
         <Route path="/employee/education/add" element={<EduDetails />} />
         <Route path="/employee/education/edit/:id" element={<EditEduDetails />} />
+
+        {/* Add Employee  */}
+        <Route path="/employee/add" element={<AddEmp />} />
+        <Route path="/employee/edit/:id" element={<EditEmp />} />
 
         {/* Work Exp */}
         <Route path="/employee/experience/add" element={<Add_Exp />} />
