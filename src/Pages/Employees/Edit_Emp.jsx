@@ -16,7 +16,7 @@ import Navbar from "../../Layout Component/Navbar";
 import Sidebar from "../../Layout Component/Sidebar";
 // import { showSuccessToast,showErrorToast } from "../../../../toastService";
 
-export default function AddEmp() {
+export default function Edit_Emp() {
   const {
     register,
     handleSubmit,
@@ -30,7 +30,7 @@ export default function AddEmp() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/employee/add/${id}`)
+      .post(`http://localhost:8000/api/employee/edit/${id}`)
       .then((response) => {
         // Transform API response into the format required for options
         const formattedOptions = response.data.map((item) => ({
@@ -40,6 +40,17 @@ export default function AddEmp() {
         setDrSignOptions(formattedOptions);
       })
       .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/employee/edit/${id}`)
+      .then((result) => {
+        if (result.data.status) {
+          setAccount(result.data.data);
+        }
+      })
+      .catch((err) => {});
   }, []);
 
   const onSubmit = async (data) => {
@@ -60,15 +71,16 @@ export default function AddEmp() {
       console.log(err);
     }
   };
+  
 
   return (
     <>
       <div className="flex flex-col h-screen overflow-x-scroll">
-        <MainHeader title="Employees > Add" />
+        <MainHeader title="Employees > Edit" />
         <div className="flex-grow mx-3 mb-3 rounded-lg bg-slate-200">
           <div className="p-3 flex items-center justify-between">
             <h1 className="text-md uppercase font-semibold">
-              Add New Employee
+              Update Employee Details
             </h1>
             <SimpleButton
               danger={true}

@@ -21,8 +21,6 @@ const Dashboard = () => {
         ></div>
       )}
 
-      {/* Sidebar */}
-      {/* <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} /> */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main Content */}
