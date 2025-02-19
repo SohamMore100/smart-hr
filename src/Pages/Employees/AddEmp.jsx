@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import MainHeader from "../FormComponents/MainHeader";
-import { SimpleButton } from "../FormComponents/Button";
+import MainHeader from "../../FormComponents/MainHeader";
+import { SimpleButton } from "../../FormComponents/Button";
 import axios from "axios";
-import { FormInputBar, FormInputSelect } from "../FormComponents/FormInput";
+import { FormInputBar, FormInputSelect } from "../../FormComponents/FormInput";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 // import { showSuccessToast,showErrorToast } from "../../../../toastService";
-export default function AddLG() {
+export default function AddEmp() {
+  
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const [serverError, setSetServerError] = useState({});
   const [drSignOptions, setDrSignOptions] = useState([]);
