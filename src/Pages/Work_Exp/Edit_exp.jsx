@@ -30,7 +30,7 @@ export default function Edit_exp() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/experience/add/${id}`)
+      .get(`http://localhost:8000/api/experience/edit/${id}`)
       .then((response) => {
         // Transform API response into the format required for options
         const formattedOptions = response.data.map((item) => ({
@@ -64,11 +64,11 @@ export default function Edit_exp() {
   return (
     <>
       <div className="flex flex-col h-screen overflow-x-scroll">
-        <MainHeader title="Employees > Add" />
+        <MainHeader title="Experience Detail > Edit" />
         <div className="flex-grow mx-3 mb-3 rounded-lg bg-slate-200">
           <div className="p-3 flex items-center justify-between">
             <h1 className="text-md uppercase font-semibold">
-              Add New Employee
+              Update Experience Detail
             </h1>
             <SimpleButton
               danger={true}
@@ -82,159 +82,125 @@ export default function Edit_exp() {
           <div className="mx-3 mb-3 bg-white rounded-lg p-3">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-wrap mb-6">
-                <FormInputSelect
-                  width="md:w-1/3 lg:w-1/3"
-                  id="reporting_manager_id"
-                  label="Reporting Manager"
-                  placeholder="Select Reporting Manager"
-                  options={[
-                    { value: "1", label: "Manager 1" },
-                    { value: "2", label: "Manager 2" },
-                  ]}
-                  columnName="reporting_manager_id"
-                  validationRules={{ required: "Required" }}
-                  register={register}
-                  errors={errors}
-                />
-
+                {/* Last Company */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="aadhar"
-                  label="Aadhar Number"
-                  placeholder="Enter Aadhar Number"
+                  id="last_company"
+                  label="Last Company"
+                  placeholder="Enter Last Company Name"
                   type="text"
-                  columnName="aadhar"
+                  columnName="last_company"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
 
+                {/* Experience Start Date */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="pan"
-                  label="PAN Number"
-                  placeholder="Enter PAN Number"
-                  type="text"
-                  columnName="pan"
-                  validationRules={{ required: "Required" }}
-                  register={register}
-                  errors={errors}
-                  serverError={serverError}
-                />
-
-                <FormInputBar
-                  width="md:w-1/3 lg:w-1/3"
-                  id="dob"
-                  label="Date of Birth"
-                  placeholder="Select DOB"
+                  id="exp_start_date"
+                  label="Experience Start Date"
+                  placeholder="Select Start Date"
                   type="date"
-                  columnName="dob"
+                  columnName="exp_start_date"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
 
-                <FormInputSelect
-                  width="md:w-1/3 lg:w-1/3"
-                  id="gender"
-                  label="Gender"
-                  placeholder="Select Gender"
-                  options={[
-                    { value: "male", label: "Male" },
-                    { value: "female", label: "Female" },
-                    { value: "other", label: "Other" },
-                  ]}
-                  columnName="gender"
-                  validationRules={{ required: "Required" }}
-                  register={register}
-                  errors={errors}
-                />
-
+                {/* Experience End Date */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="alternate_mobile"
-                  label="Alternate Mobile"
-                  placeholder="Enter Alternate Mobile Number"
-                  type="text"
-                  columnName="alternate_mobile"
+                  id="exp_end_date"
+                  label="Experience End Date"
+                  placeholder="Select End Date"
+                  type="date"
+                  columnName="exp_end_date"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
 
-                <FormInputTextArea
-                  width="md:w-1/3 lg:w-1/3"
-                  id="address1"
-                  label="Address Line 1"
-                  placeholder="Enter Address"
-                  type="text"
-                  columnName="address1"
-                  validationRules={{ required: "Required" }}
-                  register={register}
-                  errors={errors}
-                  serverError={serverError}
-                />
-
-                <FormInputTextArea
-                  width="md:w-1/3 lg:w-1/3"
-                  id="address2"
-                  label="Address Line 2"
-                  placeholder="Enter Address"
-                  type="text"
-                  columnName="address2"
-                  register={register}
-                  errors={errors}
-                />
-
+                {/* Last Designation */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="city"
-                  label="City"
-                  placeholder="Enter City"
+                  id="last_designation"
+                  label="Last Designation"
+                  placeholder="Enter Last Designation"
                   type="text"
-                  columnName="city"
+                  columnName="last_designation"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
 
+                {/* Last Salary */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="state"
-                  label="State"
-                  placeholder="Enter State"
-                  type="text"
-                  columnName="state"
+                  id="last_salary"
+                  label="Last Salary"
+                  placeholder="Enter Last Salary"
+                  type="number"
+                  columnName="last_salary"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
 
+                {/* Current Experience */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="country"
-                  label="Country"
-                  placeholder="Enter Country"
-                  type="text"
-                  columnName="country"
+                  id="current_exp"
+                  label="Current Experience (Years)"
+                  placeholder="Enter Current Experience"
+                  type="number"
+                  columnName="current_exp"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
 
+                {/* Current Salary */}
                 <FormInputBar
                   width="md:w-1/3 lg:w-1/3"
-                  id="pin_code"
-                  label="Pin Code"
-                  placeholder="Enter Pin Code"
-                  type="text"
-                  columnName="pin_code"
+                  id="current_salary"
+                  label="Current Salary"
+                  placeholder="Enter Current Salary"
+                  type="number"
+                  columnName="current_salary"
+                  validationRules={{ required: "Required" }}
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                {/* Total Experience */}
+                <FormInputBar
+                  width="md:w-1/3 lg:w-1/3"
+                  id="total_exp"
+                  label="Total Experience (Years)"
+                  placeholder="Enter Total Experience"
+                  type="number"
+                  columnName="total_exp"
+                  validationRules={{ required: "Required" }}
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                {/* Payslips */}
+                <FormInputFile
+                  width="md:w-1/3 lg:w-1/3"
+                  id="payslip1"
+                  label="Upload Payslip 1"
+                  type="file"
+                  columnName="payslip1"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
@@ -243,16 +209,82 @@ export default function Edit_exp() {
 
                 <FormInputFile
                   width="md:w-1/3 lg:w-1/3"
-                  id="photo"
-                  label="Upload Photo"
+                  id="payslip2"
+                  label="Upload Payslip 2"
                   type="file"
-                  columnName="photo"
+                  columnName="payslip2"
+                  validationRules={{ required: "Required" }}
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                <FormInputFile
+                  width="md:w-1/3 lg:w-1/3"
+                  id="payslip3"
+                  label="Upload Payslip 3"
+                  type="file"
+                  columnName="payslip3"
+                  validationRules={{ required: "Required" }}
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                {/* Offer Letter */}
+                <FormInputFile
+                  width="md:w-1/3 lg:w-1/3"
+                  id="offer_letter"
+                  label="Upload Offer Letter"
+                  type="file"
+                  columnName="offer_letter"
+                  validationRules={{ required: "Required" }}
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                {/* Experience Letter */}
+                <FormInputFile
+                  width="md:w-1/3 lg:w-1/3"
+                  id="exp_letter"
+                  label="Upload Experience Letter"
+                  type="file"
+                  columnName="exp_letter"
+                  validationRules={{ required: "Required" }}
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                {/* Increment Letter */}
+                <FormInputFile
+                  width="md:w-1/3 lg:w-1/3"
+                  id="inc_letter"
+                  label="Upload Increment Letter"
+                  type="file"
+                  columnName="inc_letter"
+                  register={register}
+                  errors={errors}
+                  serverError={serverError}
+                />
+
+                {/* UAN Number */}
+                <FormInputBar
+                  width="md:w-1/3 lg:w-1/3"
+                  id="UAN"
+                  label="UAN Number"
+                  placeholder="Enter UAN Number"
+                  type="text"
+                  columnName="UAN"
                   validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}
                 />
               </div>
+
+              {/* Submit Button */}
               <SimpleButton
                 buttonName={isSubmitting ? "Submitting..." : "Submit"}
                 type="submit"

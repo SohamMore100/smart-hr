@@ -28,7 +28,7 @@ function App() {
           element={<h1 className=" mr-[50%]  text-5xl">Not Found</h1>}
         />
         <Route path="/employee/details/add" element={<AddEmpDetails />} />
-        <Route path="/employee//details/edit/:id" element={<EditEmpDetails />} />
+        <Route path="/employee/details/edit/:id" element={<EditEmpDetails />} />
 
         {/* Employee Education Details  */}
         <Route path="/employee/education/add" element={<EduDetails />} />
