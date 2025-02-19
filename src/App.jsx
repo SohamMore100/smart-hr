@@ -31,10 +31,8 @@ function App() {
         <Route path="/employee/edit" element={<Edit_Emp />} />
 
         {/* Work Exp */}
-        <Route path="/experience/add" element={<Add_Exp />} />
-        <Route path="/experience/edit" element={<Edit_exp />} />
-
-        
+        <Route path="/employee/experience/add" element={<Add_Exp />} />
+        <Route path="/employee/experience/edit" element={<Edit_exp />} />
       </Routes>
     </>
   );
