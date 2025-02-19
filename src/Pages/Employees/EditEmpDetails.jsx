@@ -16,7 +16,7 @@ import Navbar from "../../Layout Component/Navbar";
 import Sidebar from "../../Layout Component/Sidebar";
 // import { showSuccessToast,showErrorToast } from "../../../../toastService";
 
-export default function Edit_Emp() {
+export default function EditEmpDetails() {
   const {
     register,
     handleSubmit,

@@ -6,12 +6,13 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import Register from "./Pages/Register";
-import AddEmp from "./Pages/Employees/AddEmp";
-import Edit_Emp from "./Pages/Employees/Edit_Emp";
 import { ToastContainer } from "react-toastify";
 import EduDetails from "./Pages/Employees/EduDetails";
 import Add_Exp from "./Pages/Work_Exp/Add_Exp";
 import Edit_exp from "./Pages/Work_Exp/Edit_exp";
+import EditEduDetails from "./Pages/Employees/EditEduDetails";
+import AddEmpDetails from "./Pages/Employees/AddEmpDetails";
+import EditEmpDetails from "./Pages/Employees/EditEmpDetails";
 
 function App() {
   return (
@@ -26,13 +27,16 @@ function App() {
           path="*"
           element={<h1 className=" mr-[50%]  text-5xl">Not Found</h1>}
         />
-        <Route path="/employee/add" element={<AddEmp />} />
+        <Route path="/employee/details/add" element={<AddEmpDetails />} />
+        <Route path="/employee//details/edit/:id" element={<EditEmpDetails />} />
+
+        {/* Employee Education Details  */}
         <Route path="/employee/education/add" element={<EduDetails />} />
-        <Route path="/employee/edit" element={<Edit_Emp />} />
+        <Route path="/employee/education/edit/:id" element={<EditEduDetails />} />
 
         {/* Work Exp */}
         <Route path="/employee/experience/add" element={<Add_Exp />} />
-        <Route path="/employee/experience/edit" element={<Edit_exp />} />
+        <Route path="/employee/experience/edit/:id" element={<Edit_exp />} />
       </Routes>
     </>
   );
