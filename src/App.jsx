@@ -16,6 +16,7 @@ import EditEmpDetails from "./Pages/Employees/EditEmpDetails";
 import AddEmp from "./Pages/Employees/AddEmp";
 import EditEmp from "./Pages/Employees/EditEmp";
 import ShowEmployee from "./Pages/Employees/ShowEmployee";
+import NotFound from "./Layout Component/NotFound";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route
           path="*"
-          element={<h1 className=" mr-[50%]  text-5xl">Not Found</h1>}
+          element={<NotFound/>}
         />
         <Route path="/employee/details/add/:id" element={<AddEmpDetails />} />
         <Route path="/employee/details/edit/:id" element={<EditEmpDetails />} />

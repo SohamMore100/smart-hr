@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Home,
   Calendar,
@@ -22,7 +22,7 @@ const menuItems = [
       {
         name: "Add Employee",
         icon: <Plus size={18} />,
-        link: "/employee/details/add",
+        link: "/employee/add",
       },
       { name: "Employee List", icon: <List size={18} />, link: "/employee" },
     ],
@@ -45,7 +45,6 @@ const menuItems = [
   { name: "Development", icon: <FileText size={20} />, link: "/development" },
   { name: "Reports", icon: <FileText size={20} />, link: "/reports" },
 ];
-import { useLocation } from "react-router-dom";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
@@ -61,87 +60,90 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         isOpen ? "translate-x-0" : "-translate-x-64"
       } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-50`}
     >
-      {/* Sidebar Header */}
-      <div className="p-4 flex justify-between items-center">
-        <img
-          src="https://aonemr.com/static/d183b52e02f9b5cc188a12a2d82e0bae/aone-market-research.svg"
-          alt="A One Market Research"
-          className="h-10 md:h-18"
-        />
-        <button onClick={toggleSidebar} className="md:hidden text-gray-600">
-          <X size={28} />
-        </button>
-      </div>
+      {/* Sidebar Container */}
+      <div className="flex flex-col h-full">
+        {/* Sidebar Header */}
+        <div className="p-4 flex justify-between items-center border-b border-gray-200">
+          <img
+            src="https://aonemr.com/static/d183b52e02f9b5cc188a12a2d82e0bae/aone-market-research.svg"
+            alt="A One Market Research"
+            className="h-10 md:h-18"
+          />
+          <button onClick={toggleSidebar} className="md:hidden text-gray-600">
+            <X size={28} />
+          </button>
+        </div>
 
-      {/* Navigation */}
-      <nav className="mt-3">
-        <ul className="space-y-2">
-          {menuItems.map((item, index) => (
-            <li key={index} className="relative">
-              {item.subMenu ? (
-                <>
-                  <button
-                    onClick={() => toggleMenu(item.name)}
-                    className="flex justify-between items-center w-full px-6 py-3 text-gray-700 text-[16px] font-medium cursor-pointer rounded-md transition hover:bg-gray-100"
+        {/* Sidebar Navigation - Scrollable */}
+        <nav className="flex-grow overflow-y-auto">
+          <ul className="space-y-2 mt-3">
+            {menuItems.map((item, index) => (
+              <li key={index} className="relative">
+                {item.subMenu ? (
+                  <>
+                    <button
+                      onClick={() => toggleMenu(item.name)}
+                      className="flex justify-between items-center w-full px-6 py-3 text-gray-700 text-[16px] font-medium cursor-pointer rounded-md transition hover:bg-sky-100  hover:text-indigo-700"
+                    >
+                      <div className="flex items-center">
+                        {item.icon}
+                        <span className="ml-3">{item.name}</span>
+                      </div>
+                      <ChevronDown
+                        size={18}
+                        className={`transition-transform ${
+                          openMenus[item.name] ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {openMenus[item.name] && (
+                      <ul className="ml-6 mt-1 space-y-1">
+                        {item.subMenu.map((subItem, subIndex) => (
+                          <li key={subIndex}>
+                            <Link
+                              to={subItem.link}
+                              className="flex items-center px-6 py-3 text-gray-600 font-medium hover:bg-sky-100 hover:text-indigo-700 rounded-md transition"
+                            >
+                              {subItem.icon}
+                              <span className="ml-3">{subItem.name}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    to={item.link}
+                    className={`flex items-center px-6 py-3 text-gray-700 text-[16px] font-medium rounded-md transition duration-200 hover:bg-sky-100 hover:text-indigo-700 ${
+                      location.pathname === item.link
+                        ? "bg-sky-100 text-indigo-700 font-bold"
+                        : ""
+                    }`}
                   >
-                    <div className="flex items-center">
-                      {item.icon}
-                      <span className="ml-3">{item.name}</span>
-                    </div>
-                    <ChevronDown
-                      size={18}
-                      className={`transition-transform ${
-                        openMenus[item.name] ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
+                    {item.icon}
+                    <span className="ml-3">{item.name}</span>
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-                  {openMenus[item.name] && (
-                    <ul className="ml-6 mt-1 space-y-1">
-                      {item.subMenu.map((subItem, subIndex) => (
-                        <li key={subIndex}>
-                          <Link
-                            to={subItem.link}
-                            className="flex items-center px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-md transition"
-                          >
-                            {subItem.icon}
-                            <span className="ml-3">{subItem.name}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
-                <Link
-                  to={item.link}
-                  className={`flex items-center px-6 py-3 text-gray-700 text-[16px] font-medium rounded-md transition duration-200 hover:bg-gray-100 ${
-                    location.pathname === item.link
-                      ? "bg-gray-200 font-semibold"
-                      : ""
-                  }`}
-                >
-                  {item.icon}
-                  <span className="ml-3">{item.name}</span>
-                </Link>
-              )}
+        {/* Settings & Logout Section - Stays at the Bottom */}
+        <div className="px-6 py-3 border-t border-gray-200">
+          <ul>
+            <li className="flex items-center px-6 py-3 text-gray-700 font-medium cursor-pointer hover:bg-sky-100  hover:text-indigo-700 rounded-md transition">
+              <Settings size={20} />
+              <span className="ml-3">Settings</span>
             </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* Logout & Settings */}
-      <div className="absolute bottom-4 left-0 w-full">
-        <ul className="px-6">
-          <li className="flex items-center px-6 py-3 text-gray-700 font-medium cursor-pointer hover:bg-gray-100 rounded-md transition">
-            <Settings size={20} />
-            <span className="ml-3">Settings</span>
-          </li>
-          <li className="flex items-center px-6 py-3 text-gray-700 font-medium cursor-pointer hover:bg-gray-100 rounded-md transition">
-            <LogOut size={20} />
-            <span className="ml-3">Log out</span>
-          </li>
-        </ul>
+            <li className="flex items-center px-6 py-3 text-gray-700 font-medium cursor-pointer hover:bg-sky-100  hover:text-indigo-700 rounded-md transition">
+              <LogOut size={20} />
+              <span className="ml-3">Log out</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
