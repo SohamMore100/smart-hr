@@ -9,17 +9,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 import { showSuccessToast, showErrorToast } from "../../toastService";
 import { useParams } from "react-router-dom";
+import axiosClient from "../../axiosClient";
 function EditEmp() {
-    const [patient, setPatient ] = useState({});
+    const [employee, setEmployye ] = useState({});
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm();
     const [serverError, setSetServerError] = useState({});
     const {id} = useParams();
     const navigate= useNavigate();
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/api/users/${id}`).then((result) => {
+        axiosClient.get(`/users/${id}`).then((result) => {
             if(result.data.status){
-                setPatient(result.data.data);
+                setEmployye(result.data.data);
             }
         }).catch((err) => {
             
@@ -27,23 +28,23 @@ function EditEmp() {
     },[])
 
     useEffect(() => {
-        Object.keys(patient).forEach((key) => {
-            console.log(key, patient[key]);
-            setValue(key, patient[key])
+        Object.keys(employee).forEach((key) => {
+            console.log(key, employee[key]);
+            setValue(key, employee[key])
         })
-    },[patient]);
+    },[employee]);
 
     const onSubmit = async data => {
         const parsedData = {
             ...data,
             prefix: data.prefix+'',
-            blood_group: data.blood_group +'',
+           
         };
-        const result = await axios.post(`http://127.0.0.1:8000/api/users/${id}`, parsedData)
+        const result = await axiosClient.post(`/users/${id}`, parsedData)
         console.log(result);
         if(result.data.status){
             showSuccessToast("Details updated successfully");
-            navigate("/patient")
+            navigate("/employee/details/edit")
             console.log(result)
         } else {
             setSetServerError(err.response.data.errors)
@@ -56,7 +57,7 @@ function EditEmp() {
             <MainHeader title="Employee / Edit"/>
             <div className="flex-grow mx-3 mb-3 rounded-lg bg-slate-200">
                 <div className="p-3 flex items-center justify-between">
-                <h1 className="text-md uppercase font-semibold">Edit Patient</h1>
+                <h1 className="text-md uppercase font-semibold">Edit Employee</h1>
                 <SimpleButton danger={true} onClick={() => {navigate('../employee')}} icon={<FontAwesomeIcon className="me-2" icon={faMultiply}/>} buttonName='Cancel'/>
                 </div>
                 <div className="mx-3 mb-3 bg-white rounded-lg p-4">

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import MainHeader from "../../FormComponents/MainHeader";
 import { SimpleButton } from "../../FormComponents/Button";
-import axios from "axios";
 import {
   FormInputBar,
   FormInputFile,
@@ -13,6 +12,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 import { showSuccessToast, showErrorToast } from "../../toastService";
+import axiosClient from "../../axiosClient";
+
 
 export default function AddEmpDetails() {
   const {
@@ -33,7 +34,7 @@ export default function AddEmpDetails() {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get("http://localhost:8000/api/users");
+        const response = await axiosClient.get("/users");
         console.log("API Response:", response.data); // Debugging
 
         // Extract the nested `data` array from the response
@@ -54,37 +55,50 @@ export default function AddEmpDetails() {
 
     fetchReportingManagers();
   }, []);
+  
+
+
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-
+  
       // Append form fields to FormData
       Object.keys(data).forEach((key) => {
         if (data[key] !== undefined && data[key] !== null) {
           formData.append(key, data[key]);
         }
       });
-
+  
       // Append the photo file (ensure `data.photo` is a File object)
       if (data.photo && data.photo[0]) {
         formData.append("photo", data.photo[0]); // Use the first file
       }
-
-      const response = await axios.post(
-        `http://localhost:8000/api/employees/add/${id}`,
+  
+      const token = localStorage.getItem("employee"); // Retrieve token before API call
+  
+      const response = await axiosClient.post(
+        `/employees/add/${id}`, // Ensure `id` is defined
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Employee: `Bearer ${token}`, 
           },
         }
       );
-
-      console.log(response);
+  
+      console.log("API Response:", response.data); // Debugging
+  
       if (response?.data?.message) {
-        showSuccessToast("Employee personal information added Successfully.");
+        const user_id = response.data.data?.user_id; // Ensure correct path to user_id
+        if (user_id) {
+          localStorage.setItem("user_id", user_id); // Store user_id only if it exists
+        } else {
+          console.error("user_id is undefined in API response");
+        }
+  
+        showSuccessToast("Employee personal information added successfully.");
         navigate("/employee/education/add");
-        console.log(response.data.data);
       } else {
         setSetServerError(response.data.errors);
         showErrorToast("Something went wrong");
@@ -94,7 +108,8 @@ export default function AddEmpDetails() {
       showErrorToast("Something went wrong");
     }
   };
-
+  
+  
   return (
     <>
       <div className="flex flex-col h-screen overflow-x-scroll">
@@ -102,7 +117,7 @@ export default function AddEmpDetails() {
         <div className="flex-grow mx-3 mb-3 rounded-lg bg-slate-200">
           <div className="p-3 flex items-center justify-between">
             <h1 className="text-md uppercase font-semibold">
-              Add New Employee
+              Add Employee Personal Details
             </h1>
             <SimpleButton
               danger={true}

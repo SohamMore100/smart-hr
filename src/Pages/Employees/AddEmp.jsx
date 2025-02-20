@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import MainHeader from "../../FormComponents/MainHeader";
 import { SimpleButton } from "../../FormComponents/Button";
-import axios from "axios";
 import { FormInputBar, FormInputSelect, FormInputFile } from "../../FormComponents/FormInput";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 import { showErrorToast, showSuccessToast } from "../../toastService";
+import axiosClient from "../../axiosClient";
 
 export default function AddEmp() {
   
@@ -21,10 +21,18 @@ export default function AddEmp() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/register", data);
+      const response = await axiosClient.post("/register", data);
       if (response.data.success) {
         showSuccessToast("User registered successfully");
+        const token = response.data.token;
+
+      if (token) {
+        // Remove 'Bearer ' prefix before storing
         
+        localStorage.setItem('employee', token);
+      } else {
+        console.warn("Authorization token not found in response headers");
+      }
         navigate("../employee/details/add/:id");
       } else {
         setServerError(response.data.error);

@@ -2,52 +2,78 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import MainHeader from "../../FormComponents/MainHeader";
 import { SimpleButton } from "../../FormComponents/Button";
-import axios from "axios";
-import { FormInputBar, FormInputSelect, FormInputFile } from "../../FormComponents/FormInput";
+import { FormInputBar,  FormInputFile } from "../../FormComponents/FormInput";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
-// import { showSuccessToast,showErrorToast } from "../../../../toastService";
+import { showSuccessToast, showErrorToast } from "../../toastService";
+import axiosClient from "../../axiosClient";
+
 export default function EduDetails() {
   
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const [serverError, setSetServerError] = useState({});
-  const [drSignOptions, setDrSignOptions] = useState([]);
+
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    axios.get("http://localhost:8000/api/")
-      .then(response => {
-        // Transform API response into the format required for options
-        const formattedOptions = response.data.map(item => ({
-          value: item.id, 
-          label: item.name
-        }));
-        setDrSignOptions(formattedOptions);
-      })
-      .catch(error => console.error("Error fetching data:", error));
-  }, []);
+ 
 
-  const onSubmit = async data => {
-    const parsedData = {
-      ...data,
-      // mobile: parseInt(data.mobile, 10),
-      // status: data.status === 'true',
-    };
-    const response = await axios.post('lab-group', parsedData);
-    console.log(response);
-    if(response?.data?.status){
-      // showSuccessToast('Lab Created Successfully.');
-      navigate("/lab-group")
-      console.log(response.data.data)
-      
-    } else {
-      setSetServerError(response.data.errors)
-      // showErrorToast('Something went wrong');
-      console.log(err);
-    }  
+  const onSubmit = async (data) => {
+    try {
+
+
+      // Get token from localStorage
+      const token = localStorage.getItem("employee");
+      console.log(token);
+      // Ensure token exists
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+      const doc_ssc = data.doc_ssc[0];
+      const doc_hsc = data.doc_hsc[0];
+      const doc_graduation = data.doc_graduation[0];
+      const doc_pg = data.doc_pg[0];
+      // Prepare the data
+      const parsedData = {
+        ...data,
+       
+      };
+      const formData = new FormData();
+        formData.append("doc_ssc", doc_ssc);
+        formData.append("doc_hsc", doc_hsc);
+        formData.append("doc_graduation", doc_graduation);
+        formData.append("doc_pg", doc_pg);
+        Object.keys(parsedData).forEach((key) => {
+          if (!['doc_ssc', 'doc_hsc', 'doc_graduation', 'doc_pg'].includes(key)) {
+            formData.append(key, parsedData[key]);
+        }
+        })
+      // Make the API request with Authorization header
+      const response = await axiosClient.post("/education/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+            Employee: `Bearer ${token}`, 
+        },
+      });
+  
+      console.log(response);
+  
+      if (response?.data?.message) {
+        showSuccessToast("Academic Details are stored Successfully.");
+        navigate("/employee/experience/add");
+        console.log(response.data.data);
+      } else {
+        setSetServerError(response.data.errors);
+        console.error("Error response:", response.data.errors);
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      showErrorToast("Something went wrong");
+    }
   };
+  
 
   return (
     <div className="flex flex-col h-screen overflow-x-scroll">
@@ -60,7 +86,7 @@ export default function EduDetails() {
         <div className="mx-3 mb-3 bg-white rounded-lg p-3">
              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-wrap mb-6">
-                  <FormInputBar width='md:w-1/4 lg:w-1/4' id='ssc_school' label='School Name' placeholder='Enter Your School Name' type='text' columnName='ssc_school' 
+                <FormInputBar width='md:w-1/4 lg:w-1/4' id='ssc_schoole' label='SSC School Name' placeholder='Enter Your School Name' type='text' columnName='ssc_schoole' 
                     validationRules={{ required: "Required"}} 
                     register={register} errors={errors} serverError={serverError}/>
                   <FormInputBar width='md:w-1/4 lg:w-1/4' id='ssc_per' label='Percentage' placeholder='Enter your SSC percentage' type='number' columnName='ssc_per' 
@@ -100,7 +126,7 @@ export default function EduDetails() {
 
 
                   <FormInputBar width='md:w-1/4 lg:w-1/4' id='PG_college' label='PG College Name' placeholder='Enter Your College Name' type='text' columnName='PG_college' 
-                    validationRules={{ required: "Required"}} 
+                   
                     register={register} errors={errors} serverError={serverError}/>
                   <FormInputBar width='md:w-1/4 lg:w-1/4' id='pg_cgpa' label='Graduation CGPA' placeholder='Enter your PG CGPA' type='number' columnName='pg_cgpa' 
                     validationRules={{ required: false}} register={register} errors={errors} serverError={serverError}/>
@@ -123,7 +149,7 @@ export default function EduDetails() {
                     placeholder="upload Graduation Marksheet" columnName="doc_graduation" validationRules={{ required: "Required" }} 
                     register={register} errors={errors} serverError={serverError} />
                    <FormInputFile width="md:w-1/4"  id="doc_pg" label="PG Marksheet" type='file'
-                    placeholder="upload PG Marksheet" columnName="doc_pg" validationRules={{ required: "Required" }} 
+                    placeholder="upload PG Marksheet" columnName="doc_pg" 
                     register={register} errors={errors} serverError={serverError} />
                 </div>
                 <SimpleButton buttonName={isSubmitting ? 'Submitting...' :'Submit'} type='submit' disabled={isSubmitting} />
