@@ -94,7 +94,7 @@ export default function EditEmpDetails() {
       const token = localStorage.getItem("employee"); // Retrieve token before API call
   
       const response = await axiosClient.post(
-        `/employees/add/${id}`, // Ensure `id` is defined
+        `/employees/edit/${id}`, // Ensure `id` is defined
         formData,
         {
           headers: {
@@ -114,8 +114,8 @@ export default function EditEmpDetails() {
           console.error("user_id is undefined in API response");
         }
   
-        showSuccessToast("Employee personal information added successfully.");
-        navigate("/employee/education/add");
+        showSuccessToast("Employee personal information updated successfully.");
+        navigate(`/employee/education/edit/${user_id}`);
       } else {
         setSetServerError(response.data.errors);
         showErrorToast("Something went wrong");
