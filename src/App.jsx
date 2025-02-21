@@ -9,7 +9,7 @@ import Register from "./Pages/Register";
 import { ToastContainer } from "react-toastify";
 import EduDetails from "./Pages/Employees/EduDetails";
 import Add_Exp from "./Pages/Employees/AddExpDetails";
-import Edit_exp from "./Pages/Employees/Edit_exp";
+import Edit_exp from "./Pages/Employees/EditExpDetails";
 import EditEduDetails from "./Pages/Employees/EditEduDetails";
 import AddEmpDetails from "./Pages/Employees/AddEmpDetails";
 import EditEmpDetails from "./Pages/Employees/EditEmpDetails";
