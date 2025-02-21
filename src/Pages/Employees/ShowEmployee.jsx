@@ -4,10 +4,9 @@ import { InputSearch } from "../../FormComponents/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { SimpleButton } from "../../FormComponents/Button";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TableEditButton } from "../../FormComponents/Tables";
-
+import axiosClient from "../../axiosClient";
 
 function addEditProperty(objects){
     objects.map((obj) => {
@@ -66,11 +65,10 @@ function ShowEmployee() {
   }
   useEffect(() => {
     if(cSearch){
-      axios.get(`http://127.0.0.1:8000/api/users?search=${cSearch}`).then((result) => {
+      axiosClient.get(`/users?search=${cSearch}`).then((result) => {
         console.log(result);
         if(result.data.status){
           accountData(result.data.data.data)
-          // setPatient(addEditProperty(result.data.data.data));
           setLoading(false);
         }
        
@@ -78,10 +76,10 @@ function ShowEmployee() {
         console.log(err);
       });
     } else {
-      axios.get('http://127.0.0.1:8000/api/users').then((result) => {
+      axiosClient.get('/users').then((result) => {
         if(result.data.status){
           accountData(result.data.data.data)
-          // setPatient(addEditProperty(result.data.data.data));
+          
           setLoading(false);
         }
       }).catch((err) => {``
@@ -140,7 +138,7 @@ function ShowEmployee() {
                                                    
                                                    
                                                     <td className="px-4 py-3 border-b border-gray-200 bg-white">
-                                                        <TableEditButton path={`/employee/edit/${t.id}`}/>
+                                                        <TableEditButton path={`/employee/home/edit/${t.id}`}/>
                                                         
                                                     </td>
                                                  </tr>

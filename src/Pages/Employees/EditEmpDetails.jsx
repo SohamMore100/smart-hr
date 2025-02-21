@@ -115,7 +115,7 @@ export default function EditEmpDetails() {
         }
   
         showSuccessToast("Employee personal information updated successfully.");
-        navigate(`/employee/education/edit/${user_id}`);
+        navigate(`/employee/home/edit/${user_id}`);
       } else {
         setSetServerError(response.data.errors);
         showErrorToast("Something went wrong");
@@ -312,7 +312,7 @@ export default function EditEmpDetails() {
                   label="Upload Photo"
                   type="file"
                   columnName="photo"
-                  validationRules={{ required: "Required" }}
+                  // validationRules={{ required: "Required" }}
                   register={register}
                   errors={errors}
                   serverError={serverError}

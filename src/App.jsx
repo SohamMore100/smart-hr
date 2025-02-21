@@ -17,6 +17,7 @@ import AddEmp from "./Pages/Employees/AddEmp";
 import EditEmp from "./Pages/Employees/EditEmp";
 import ShowEmployee from "./Pages/Employees/ShowEmployee";
 import NotFound from "./Layout Component/NotFound";
+import EditEmpPage from "./Pages/Employees/EditEmpPage";
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
         <Route path="/employee/details/add/:id" element={<AddEmpDetails />} />
         <Route path="/employee/details/edit/:id" element={<EditEmpDetails />} />
 
+
+
+        <Route path = "employee/home/edit/:id" element={<EditEmpPage />} />
         {/* Employee Education Details  */}
         <Route path="/employee/education/add" element={<EduDetails />} />
         <Route path="/employee/education/edit/:id" element={<EditEduDetails />} />

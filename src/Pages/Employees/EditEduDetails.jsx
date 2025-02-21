@@ -3,48 +3,89 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import MainHeader from "../../FormComponents/MainHeader";
 import { SimpleButton } from "../../FormComponents/Button";
-import axios from "axios";
 import { FormInputBar, FormInputFile } from "../../FormComponents/FormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMultiply } from "@fortawesome/free-solid-svg-icons";
-
+import axiosClient from "../../axiosClient";
+import { showSuccessToast, showErrorToast } from "../../toastService";
 function EditEduDetails() {
-    const [doctorSignature, setDoctorSignature ] = useState({});
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm();
     const [serverError, setSetServerError] = useState({});
+    const [employee, setEmployye ] = useState({});
     const {id} = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`doctor-signature/${id}`).then((result) => {
-            if(result.data.status){
-                setDoctorSignature(result.data.data);
-            }
-        }).catch((err) => {
-            
-        });
-    },[])
+      axiosClient.get(`/education/${id}`).then((result) => {
+          if(result.data.status){
+              setEmployye(result.data.data);
+          }
+      }).catch((err) => {
+          
+      });
+  },[])
 
-    useEffect(() => {
-        Object.keys(doctorSignature).forEach((key) => {
-            setValue(key, doctorSignature[key])
+  useEffect(() => {
+      Object.keys(employee).forEach((key) => {
+          console.log(key, employee[key]);
+          setValue(key, employee[key])
+      })
+  },[employee]);
+
+  const onSubmit = async (data) => {
+    try {
+
+
+      // Get token from localStorage
+      const token = localStorage.getItem("employee");
+      console.log(token);
+      // Ensure token exists
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+      const doc_ssc = data.doc_ssc[0];
+      const doc_hsc = data.doc_hsc[0];
+      const doc_graduation = data.doc_graduation[0];
+      const doc_pg = data.doc_pg[0];
+      // Prepare the data
+      const parsedData = {
+        ...data,
+       
+      };
+      const formData = new FormData();
+        formData.append("doc_ssc", doc_ssc);
+        formData.append("doc_hsc", doc_hsc);
+        formData.append("doc_graduation", doc_graduation);
+        formData.append("doc_pg", doc_pg);
+        Object.keys(parsedData).forEach((key) => {
+          if (!['doc_ssc', 'doc_hsc', 'doc_graduation', 'doc_pg'].includes(key)) {
+            formData.append(key, parsedData[key]);
+        }
         })
-    },[doctorSignature]);
-
-    const onSubmit = async data => {
-        const parsedData = {
-            ...data,
-            // mobile_1: parseInt(data.mobile_1, 10),
-            // status: data.status === 'true',
-            };
-            axios.put(`doctor-signature/${id}`, parsedData).then((result) => {
-            console.log(result)
-            }).catch((err) => {
-            setSetServerError(err.response.data.errors)
-            console.log(err);
-        });
-
-    };
+      // Make the API request with Authorization header
+      const response = await axiosClient.post(`/education/edit/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+            Employee: `Bearer ${token}`, 
+        },
+      });
+  
+      console.log(response);
+  
+      if (response?.data?.message) {
+        showSuccessToast("Academic Details are updated Successfully.");
+        navigate(`/employee/home/edit/${id}`);
+        console.log(response.data.data);
+      } else {
+        setSetServerError(response.data.errors);
+        console.error("Error response:", response.data.errors);
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      showErrorToast("Something went wrong");
+    }
+  };
     return (
         <div className="flex flex-col h-screen overflow-x-scroll">
               <MainHeader title="Employee / Academic Details / Add" />
@@ -56,7 +97,7 @@ function EditEduDetails() {
                 <div className="mx-3 mb-3 bg-white rounded-lg p-3">
                      <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex flex-wrap mb-6">
-                          <FormInputBar width='md:w-1/4 lg:w-1/4' id='ssc_school' label='School Name' placeholder='Enter Your School Name' type='text' columnName='ssc_school' 
+                          <FormInputBar width='md:w-1/4 lg:w-1/4' id='ssc_schoole' label='School Name' placeholder='Enter Your School Name' type='text' columnName='ssc_schoole' 
                             validationRules={{ required: "Required"}} 
                             register={register} errors={errors} serverError={serverError}/>
                           <FormInputBar width='md:w-1/4 lg:w-1/4' id='ssc_per' label='Percentage' placeholder='Enter your SSC percentage' type='number' columnName='ssc_per' 
@@ -110,16 +151,16 @@ function EditEduDetails() {
                             validationRules={{ required: false}} register={register} errors={errors} serverError={serverError}/>
         
                            <FormInputFile width="md:w-1/4"  id="doc_ssc" label="SSC Marksheet" type='file'
-                            placeholder="upload SSC Marksheet" columnName="doc_ssc" validationRules={{ required: "Required" }} 
+                            placeholder="upload SSC Marksheet" columnName="doc_ssc" 
                             register={register} errors={errors} serverError={serverError} />
                            <FormInputFile width="md:w-1/4"  id="doc_hsc" label="HSC Marksheet" type='file'
-                            placeholder="upload HSC Marksheet" columnName="doc_hsc" validationRules={{ required: "Required" }} 
+                            placeholder="upload HSC Marksheet" columnName="doc_hsc" 
                             register={register} errors={errors} serverError={serverError} />
                            <FormInputFile width="md:w-1/4"  id="doc_graduation" label="Graduation Marksheet" type='file'
-                            placeholder="upload Graduation Marksheet" columnName="doc_graduation" validationRules={{ required: "Required" }} 
+                            placeholder="upload Graduation Marksheet" columnName="doc_graduation"  
                             register={register} errors={errors} serverError={serverError} />
                            <FormInputFile width="md:w-1/4"  id="doc_pg" label="PG Marksheet" type='file'
-                            placeholder="upload PG Marksheet" columnName="doc_pg" validationRules={{ required: "Required" }} 
+                            placeholder="upload PG Marksheet" columnName="doc_pg" 
                             register={register} errors={errors} serverError={serverError} />
                         </div>
                         <SimpleButton buttonName={isSubmitting ? 'Submitting...' :'Submit'} type='submit' disabled={isSubmitting} />

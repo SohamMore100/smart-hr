@@ -42,9 +42,9 @@ function EditEmp() {
         };
         const result = await axiosClient.post(`/users/${id}`, parsedData)
         console.log(result);
-        if(result.data.status){
+        if(result.data.message){
             showSuccessToast("Details updated successfully");
-            navigate("/employee/details/edit")
+            navigate(`/employee/home/edit/${id}`)
             console.log(result)
         } else {
             setSetServerError(err.response.data.errors)
