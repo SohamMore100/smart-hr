@@ -23,7 +23,7 @@ const Dashboard = () => {
 
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-      {/* Main Content */}
+      {/* Main  */}
       <div className="flex-1 transition-all duration-300 ease-in-out">
         {/* <Navbar toggleSidebar={toggleSidebar} /> */}
         <Navbar toggleSidebar={toggleSidebar} />
